@@ -41,7 +41,9 @@
         "require-jsdoc": "off",
         "indent": ["error", 2],
         "padded-blocks": ["error", { "classes": "always" }],
-        "object-curly-spacing": ["error", "always"]
+        "object-curly-spacing": ["error", "always"],
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error"
       }
     },
     {
