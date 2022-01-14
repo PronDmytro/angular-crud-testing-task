@@ -6,6 +6,7 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './core/services/in-memory-data.service';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialDesignModule } from './core/material-design/material-design.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService),
     BrowserAnimationsModule,
+    MaterialDesignModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
