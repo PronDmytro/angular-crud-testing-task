@@ -1,0 +1,62 @@
+<ng-container *ngIf='!dataToDisplay'>
+  <div fxLayout="column" fxLayoutAlign="center center" style="height: 100vh">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-container>
+
+<ng-container *ngIf='dataToDisplay'>
+  <div class="container">
+    <div class="buttons-block" fxLayout="row" fxLayoutAlign="start center">
+      <button mat-raised-button [routerLink]="['/add']">
+        <mat-icon>add_circle_outline</mat-icon>
+        Добавить
+      </button>
+      <button mat-raised-button fxFlexOffset="10" (click)="view()" [disabled]="selectedRow.isEmpty()">
+        <mat-icon>remove_red_eye</mat-icon>
+        Просмотр
+      </button>
+      <button mat-raised-button (click)="edit()" [disabled]="selectedRow.isEmpty()">
+        <mat-icon>edit</mat-icon>
+        Редактировать
+      </button>
+      <button mat-raised-button (click)="delete()" [disabled]="selectedRow.isEmpty()">
+        <mat-icon>delete_forever</mat-icon>
+        Удалить
+      </button>
+    </div>
+
+    <table mat-table [dataSource]="dataToDisplay" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef>Фамилия</th>
+        <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef>Имя</th>
+        <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="middleName">
+        <th mat-header-cell *matHeaderCellDef>Отчество</th>
+        <td mat-cell *matCellDef="let element"> {{element.middleName}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="carsCount">
+        <th mat-header-cell *matHeaderCellDef>Количество автомобилей</th>
+        <td mat-cell *matCellDef="let element"> {{element.cars.length}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row
+          (click)="selectedRow.toggle(row)"
+          [ngClass]="{hovered: row.hovered, 'row-is-selected': selectedRow.isSelected(row)}"
+          (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"
+          *matRowDef="let row; columns: columnsToDisplay;"></tr>
+    </table>
+  </div>
+</ng-container>
+
