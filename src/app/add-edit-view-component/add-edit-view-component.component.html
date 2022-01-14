@@ -1,0 +1,155 @@
+<ng-container *ngIf='isLoading'>
+  <div fxLayout="column" fxLayoutAlign="center center" style="height: 100vh">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-container>
+<ng-container *ngIf='isError'>
+  <h1>Что-то пошло не так. Попробуйте ещо раз!</h1>
+</ng-container>
+<div [hidden]="isLoading || isError">
+  <mat-card class="form-card">
+    <div fxLayout='row' fxLayoutAlign='center center'>
+      <mat-card-actions align='start'>
+        <button mat-raised-button [routerLink]="['']">
+          <mat-icon>arrow_back</mat-icon>
+          Назад
+        </button>
+      </mat-card-actions>
+      <div fxFlex='99'>
+        <ng-container [ngSwitch]="viewMode">
+          <ng-container *ngSwitchCase="ViewMode.ADD">
+            <mat-card-title>Добавление новой записи</mat-card-title>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="ViewMode.SHOW">
+            <mat-card-title>Просмотр</mat-card-title>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="ViewMode.EDIT">
+            <mat-card-title>Редактирование записи</mat-card-title>
+          </ng-container>
+        </ng-container>
+      </div>
+
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between start">
+      <form [formGroup]="userForm" novalidate (ngSubmit)="submit()" fxLayout="column"
+            fxLayoutAlign="space-around start">
+        <h2>Персональные данные</h2>
+        <mat-form-field>
+          <mat-label>Фамилия</mat-label>
+          <input matInput name="lastName" formControlName="lastName" type='text'>
+          <mat-error *ngIf="userForm.controls['lastName'].invalid && userForm.controls['lastName'].touched">
+            Не указана фамилия
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Имя</mat-label>
+          <input matInput name="firstName" formControlName="firstName" type='text'>
+          <mat-error *ngIf="userForm.controls['firstName'].invalid && userForm.controls['firstName'].touched">
+            Не указано имя
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Отчество</mat-label>
+          <input matInput name="middleName" formControlName="middleName" type='text'>
+          <mat-error *ngIf="userForm.controls['middleName'].invalid && userForm.controls['middleName'].touched">
+            Не указано отчество
+          </mat-error>
+        </mat-form-field>
+        <div fxLayout="column" fxLayoutAlign="space-between start">
+          <button mat-raised-button color="primary" [disabled]="!isFormsValid() || isShowMode">
+            <mat-icon>save</mat-icon>
+            Сохранить
+          </button>
+        </div>
+      </form>
+      <form [formGroup]="carsForm">
+        <h2>Автомобили</h2>
+        <mat-card>
+          <mat-table #table [dataSource]="carsDataSource" [trackBy]="trackRows">
+            <ng-container matColumnDef="registrationNumber">
+              <mat-cell *matCellDef="let row; let i = index">
+                <ng-container [formGroup]="row">
+                  <mat-form-field>
+                    <mat-label>Номер</mat-label>
+                    <input matInput placeholder="Номер" type='text'
+                           formControlName="registrationNumber" required>
+                    <mat-error
+                      *ngIf="row.controls['registrationNumber'].invalid && row.controls['registrationNumber'].touched">
+                      Укажите коректный номер
+                    </mat-error>
+                  </mat-form-field>
+                </ng-container>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="manufacturer">
+              <mat-cell *matCellDef="let row; let i = index">
+                <ng-container [formGroup]="row">
+                  <mat-form-field>
+                    <mat-label>Марка</mat-label>
+                    <input matInput placeholder="Марка" type='text'
+                           formControlName="manufacturer" required>
+                    <mat-error *ngIf="row.controls['manufacturer'].invalid && row.controls['manufacturer'].touched">
+                      Не указана марка
+                    </mat-error>
+                  </mat-form-field>
+                </ng-container>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="model">
+              <mat-cell *matCellDef="let row; let i = index">
+                <ng-container [formGroup]="row">
+                  <mat-form-field>
+                    <mat-label>Модель</mat-label>
+                    <input matInput placeholder="Модель" type='text'
+                           formControlName="model" required>
+                    <mat-error *ngIf="row.controls['model'].invalid && row.controls['model'].touched">
+                      Не указана модель
+                    </mat-error>
+                  </mat-form-field>
+                </ng-container>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="productionYear">
+              <mat-cell *matCellDef="let row; let i = index">
+                <ng-container [formGroup]="row">
+                  <mat-form-field>
+                    <mat-label>Год</mat-label>
+                    <input matInput placeholder="Год" type="text"
+                           formControlName="productionYear" required>
+                    <mat-error *ngIf="row.controls['productionYear'].invalid && row.controls['productionYear'].touched">
+                      Укажите год в диапазоне 1990 – текущий год
+                    </mat-error>
+                  </mat-form-field>
+                </ng-container>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="deleteBtn">
+              <mat-cell *matCellDef="let row; let i = index">
+                <button mat-raised-button color="warn" [disabled]="isShowMode" (click)="deleteRow(row)">
+                  <mat-icon>delete_forever</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          </mat-table>
+
+          <mat-card-actions>
+            <button mat-raised-button color="primary" [disabled]="isShowMode"
+                    (click)="createRow()">
+              <mat-icon>add</mat-icon>
+              Добавить Автомобиль
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </form>
+    </div>
+  </mat-card>
+</div>
+

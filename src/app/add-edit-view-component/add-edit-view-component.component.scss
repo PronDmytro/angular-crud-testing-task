@@ -1,0 +1,29 @@
+form {
+  margin: 1rem 3rem 0 3rem;
+}
+
+mat-card-title, h2 {
+  text-align: center
+}
+
+mat-form-field {
+  margin-right: 1rem;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.form-card {
+  margin: 1rem 3rem 0 3rem;
+  min-width: max-content;
+}
+
+mat-table mat-form-field {
+  margin-bottom: 0.7rem;
+}
+
+mat-cell {
+  overflow: visible;
+}
